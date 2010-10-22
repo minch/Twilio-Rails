@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "trails"
-  s.version     = Bundler::VERSION
+  s.version     = '1.1.5'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Hemant Bhanoo", "Adam Weller"]
   s.email       = ["hbanoo@github.com"]

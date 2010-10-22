@@ -22,7 +22,7 @@ module Trails
         # mess with the controller, allowing us to add parameters
         header_modifier = lambda{ |h,o| modify_headers_with_twilio_opts( h, o ) }
         param_modifier = lambda{ |p,o| modify_params_with_twilio_opts( p, o ) }
-        @controller.metaclass.send( :define_method, :process_with_twilio_as_caller ) do |request, response|
+        @controller.singleton_class.send( :define_method, :process_with_twilio_as_caller ) do |request, response|
           # unfortunately we have to reach a little deep into the request here...
           parameters_to_add = {}
           header_modifier.call( request.env, as_twilio_opts )
@@ -36,10 +36,10 @@ module Trails
 
           process_without_twilio_as_caller( request, response )
         end # def process_with_twilio_as_caller
-        @controller.metaclass.send( :alias_method_chain, :process, :twilio_as_caller )
+        @controller.singleton_class.send( :alias_method_chain, :process, :twilio_as_caller )
 
         # need to to easily add parameters
-        @controller.metaclass.send( :define_method, :add_parameters ) do |params|
+        @controller.singleton_class.send( :define_method, :add_parameters ) do |params|
           params ||= {}
           request.query_parameters.merge!( params )
           new_uri = request.request_uri + '&' + params.

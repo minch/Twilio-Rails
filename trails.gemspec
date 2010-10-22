@@ -8,6 +8,6 @@ Gem::Specification.new do |s|
   s.summary     = "Code to make it super-clean to develop twilio apps on rails."
   s.description = "Code to make it super-clean to develop twilio apps on rails."
   s.required_rubygems_version = ">= 1.3.6"
-  s.files        = Dir.glob("{bin,lib}/**/*") + %w(LICENSE README.md ROADMAP.md CHANGELOG.md)
+  s.files        = Dir.glob("{bin,lib}/**/*")
   s.require_path = 'lib'
 end

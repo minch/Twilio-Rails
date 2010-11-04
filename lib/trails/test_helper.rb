@@ -117,6 +117,11 @@ module Trails
       params['CallGuid'] ||= guid
       params['SmsMessageSid'] = 'DummyMessageSid' if( as_twilio_opts[:sms] )
       params['CallSid'] = call_sid
+
+      # TODO:  Should normalize what can be in the options hash
+      # Anyhow, some params aren't sent in the twiml request if they don't exist,
+      # :RecordingUrl being one such -minch
+      params['RecordingUrl'] = as_twilio_opts[:RecordingUrl] if as_twilio_opts[:RecordingUrl]
     end
 
     private

@@ -122,6 +122,7 @@ module Trails
       # Anyhow, some params aren't sent in the twiml request if they don't exist,
       # :RecordingUrl being one such -minch
       params['RecordingUrl'] = as_twilio_opts[:RecordingUrl] if as_twilio_opts[:RecordingUrl]
+      params['CallDuration'] = as_twilio_opts[:CallDuration] if as_twilio_opts[:CallDuration]
     end
 
     private

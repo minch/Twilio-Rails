@@ -41,8 +41,23 @@ module Trails
       #
       #    request.is_twilio_call?
       #
+
+      #
+      # TODO (minch):
+      #
+      # Add security per:
+      #
+      # http://www.twilio.com/docs/security-reliability/security
+      #
+      # Which basically checks the value of request.env['HTTP_X_TWILIO_SIGNATURE']
+      #
+      # For now we'll simply check that both the above and the correct account sid
+      # exist in the request.
+      #
       def is_twilio_call?
-        return !Trails::Twilio::Account.sid_from_request( request ).blank?
+        # NOTE:  if we force the header check now then it makes it difficult to test w/a browser, not ideal for the beta phase.
+        # Therefore, leaving this as a TODO for now.
+        return ! Trails::Twilio::Account.sid_from_request( request ).blank? # && request.env['HTTP_X_TWILIO_SIGNATURE'].blank?)
       end
 
       protected

@@ -4,11 +4,13 @@ module Trails
       attr_reader :config
       def initialize( opts = {} )
         _logger = opts[:logger] || ActiveRecord::Base.logger rescue Logger.new( STDERR )
+
         if( !opts.blank? ) 
           _logger.warn "overriding default opts #{self.class.config.inspect} with #{opts.inspect}"
         else
           opts = self.class.config[self.class.config.keys.first]
         end
+
         @config = opts.dup
         @sid = @config[:sid] || raise( "no sid specified on #{self}" )
         @token = @config[:token]
@@ -16,14 +18,16 @@ module Trails
       end
 
       def self.sid_from_request( request )
-        ( :development == RAILS_ENV.to_sym ) ? request.params['AccountSid'] : request.env["HTTP_X_TWILIO_ACCOUNTSID"]
+        # sid = ( :development == RAILS_ENV.to_sym ) ? request.params['AccountSid'] : request.env["HTTP_X_TWILIO_ACCOUNTSID"]
+        sid = request.params['AccountSid']
       end
 
       def self.from_request( request )
         sid = sid_from_request( request )
         unless( config.has_key?( sid ) )
           logger.warn{ "unknown twilio account #{sid}. Request params: #{request.inspect}" }
-          raise Trails::Exception::UnknownAccount.new( sid )
+          # raise Trails::Exception::UnknownAccount.new( sid )
+          return
         end
         account = new( config[sid].dup )
         raise Trails::Exception::InvalidSignature unless account.verify_caller( request )
@@ -171,11 +175,13 @@ module Trails
       def logger
         self.class.logger
       end
+
       def self.logger
-        return @logger unless @logger.nil?
-        @logger = Logger.new( STDERR )
-        @logger.level = Logger::WARN
-        return @logger
+        # return @logger unless @logger.nil?
+        # @logger = Logger.new( STDERR )
+        # @logger.level = Logger::WARN
+        # return @logger
+        RAILS_DEFAULT_LOGGER
       end
       def self.config
         @@all_cfg ||= YAML::load_file( config_file ).freeze

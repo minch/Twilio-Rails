@@ -105,14 +105,18 @@ module Trails
     end
 
     def modify_params_with_twilio_opts( params, as_twilio_opts )
-      caller = as_twilio_opts[:Caller] || '4155551212'
-      called = as_twilio_opts[:Called] || '6155556161'
+      default_from = '4155551212'
+      default_to = '6155556161'
+      from = as_twilio_opts[:From] || default_from
+      to = as_twilio_opts[:To] || default_to
       status = as_twilio_opts[:CallStatus] || 'in-progress'
       guid = as_twilio_opts[ :CallGuid ] || generate_call_guid
       call_sid = as_twilio_opts[ :CallSid ] || generate_call_sid
 
-      params['Caller'] = caller
-      params['Called'] = called
+      params['Caller'] = from
+      params['Called'] = to
+      params['From'] = from
+      params['To'] = to
       params['CallStatus'] ||= status
       params['CallGuid'] ||= guid
       params['SmsMessageSid'] = 'DummyMessageSid' if( as_twilio_opts[:sms] )
